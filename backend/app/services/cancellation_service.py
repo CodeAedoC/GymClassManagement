@@ -8,7 +8,7 @@ from app.models.models import (
     BookingStatus,
     RestrictionStatus,
 )
-from app.core.metrics import GYM_LATE_CANCELLATIONS_TOTAL, GYM_RESTRICTED_MEMBERS_TOTAL
+from app.core.metrics import GYM_LATE_CANCELLATIONS_TOTAL
 
 
 def get_utc_now():

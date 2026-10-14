@@ -7,7 +7,6 @@ from fastapi.testclient import TestClient
 
 from app.main import app
 from app.core.database import Base, get_db
-from app.models.models import Member, Slot, StreakProfile, MembershipType, RestrictionStatus
 
 # In-memory SQLite for deterministic, isolated testing
 SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
