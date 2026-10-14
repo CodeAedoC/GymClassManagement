@@ -1,5 +1,9 @@
 backend:
   replicaCount: 1
+  image:
+    repository: devopsfinal-backend
+    tag: latest
+    pullPolicy: Never
   resources:
     limits:
       cpu: 250m
@@ -10,6 +14,10 @@ backend:
 
 frontend:
   replicaCount: 1
+  image:
+    repository: devopsfinal-frontend
+    tag: latest
+    pullPolicy: Never
   resources:
     limits:
       cpu: 100m
