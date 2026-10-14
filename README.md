@@ -94,7 +94,9 @@ docker compose up --build -d
 - **Backend API Docs (Swagger)**: [http://localhost:8000/docs](http://localhost:8000/docs)
 - **Health Check Endpoint**: [http://localhost:8000/health](http://localhost:8000/health)
 - **Readiness Check Endpoint**: [http://localhost:8000/ready](http://localhost:8000/ready)
-- **Prometheus Metrics**: [http://localhost:8000/metrics](http://localhost:8000/metrics)
+- **Prometheus Metrics (Raw)**: [http://localhost:8000/metrics](http://localhost:8000/metrics)
+- **Prometheus UI**: [http://localhost:9090](http://localhost:9090)
+- **Grafana Visual Dashboard**: [http://localhost:3200](http://localhost:3200) (pre-configured with live charts)
 
 To stop the stack:
 ```bash
@@ -174,10 +176,17 @@ helm upgrade --install gym-portal helm/gym-portal -n gym-portal
 ---
 
 ## 8. Observability & Monitoring
-
+ 
 - **Prometheus Metrics**: Exposed on `/metrics` with custom gauges and counters:
   - `gym_bookings_total` (Counter)
   - `gym_late_cancellations_total` (Counter)
   - `gym_active_streaks_total` (Gauge)
   - `gym_restricted_members_total` (Gauge)
-- **Monitoring Manifests**: Located in `monitoring/` including `service-monitor.yaml` and `grafana-dashboard.json`.
+  - `http_requests_total` and `http_request_duration_seconds` (HTTP traffic & latency)
+- **Prometheus Server**: Scrapes the backend every 5 seconds (accessible at `http://localhost:9090`).
+- **Grafana Dashboard**: Automatically provisioned on startup with pre-built panels at `http://localhost:3200`:
+  - API Request Rate (`req/sec`)
+  - API Latency (95th Percentile)
+  - Active Member Streaks
+  - Late Cancellations Total
+- **Kubernetes / Helm Manifests**: Located in `monitoring/` including `service-monitor.yaml`, `values.yaml`, and `grafana-dashboard.json`.
