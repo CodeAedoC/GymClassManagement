@@ -1,0 +1,19 @@
+NAME                                       READY   STATUS    RESTARTS   AGE
+pod/gym-portal-backend-55cbccb948-vtrbq    0/1     Running   0          145m
+pod/gym-portal-backend-858c5bcf47-k9zxc    0/1     Running   0          147m
+pod/gym-portal-frontend-6c87478648-rm5sg   1/1     Running   0          143m
+
+NAME                          TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+service/gym-portal-backend    ClusterIP   10.96.190.165   <none>        8000/TCP   147m
+service/gym-portal-frontend   ClusterIP   10.96.210.219   <none>        80/TCP     147m
+
+NAME                                  READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/gym-portal-backend    0/1     1            0           147m
+deployment.apps/gym-portal-frontend   1/1     1            1           147m
+
+NAME                                             DESIRED   CURRENT   READY   AGE
+replicaset.apps/gym-portal-backend-55cbccb948    1         1         0       145m
+replicaset.apps/gym-portal-backend-858c5bcf47    1         1         0       147m
+replicaset.apps/gym-portal-frontend-67897cdd7    0         0         0       145m
+replicaset.apps/gym-portal-frontend-6c7978fcbd   0         0         0       147m
+replicaset.apps/gym-portal-frontend-6c87478648   1         1         1       143m

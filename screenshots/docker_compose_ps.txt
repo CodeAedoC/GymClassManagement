@@ -1,0 +1,8 @@
+NAME             IMAGE                       COMMAND                  SERVICE         CREATED          STATUS                    PORTS
+gym-backend      devopsfinal-backend         "uvicorn app.main:ap…"   backend         52 minutes ago   Up 51 minutes (healthy)   0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp
+gym-celery       devopsfinal-celery_worker   "celery -A app.tasks…"   celery_worker   3 hours ago      Up 3 hours                8000/tcp
+gym-frontend     devopsfinal-frontend        "/docker-entrypoint.…"   frontend        49 minutes ago   Up 49 minutes             0.0.0.0:3100->8080/tcp, [::]:3100->8080/tcp
+gym-grafana      grafana/grafana:10.4.0      "/run.sh"                grafana         27 minutes ago   Up 27 minutes             0.0.0.0:3200->3000/tcp, [::]:3200->3000/tcp
+gym-postgres     postgres:16-alpine          "docker-entrypoint.s…"   postgres        3 hours ago      Up 3 hours (healthy)      0.0.0.0:5432->5432/tcp, [::]:5432->5432/tcp
+gym-prometheus   prom/prometheus:v2.51.0     "/bin/prometheus --c…"   prometheus      29 minutes ago   Up 29 minutes             0.0.0.0:9090->9090/tcp, [::]:9090->9090/tcp
+gym-redis        redis:7-alpine              "docker-entrypoint.s…"   redis           3 hours ago      Up 3 hours (healthy)      0.0.0.0:6379->6379/tcp, [::]:6379->6379/tcp

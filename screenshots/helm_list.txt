@@ -1,0 +1,2 @@
+NAME      	NAMESPACE 	REVISION	UPDATED                              	STATUS  	CHART           	APP VERSION
+gym-portal	gym-portal	2       	2026-10-14 18:35:01.1703312 +0530 IST	deployed	gym-portal-1.0.0	1.0.0      

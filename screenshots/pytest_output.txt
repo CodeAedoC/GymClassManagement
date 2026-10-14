@@ -1,0 +1,39 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.9, pytest-8.3.4, pluggy-1.6.0 -- D:\Code\DevOpsFinal\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: D:\Code\DevOpsFinal
+plugins: anyio-4.15.1, asyncio-0.25.3
+asyncio: mode=Mode.STRICT, asyncio_default_fixture_loop_scope=None
+collecting ... collected 19 items
+
+backend/tests/test_gym_portal.py::test_01_health_and_ready_endpoints PASSED [  5%]
+backend/tests/test_gym_portal.py::test_02_create_booking_success PASSED  [ 10%]
+backend/tests/test_gym_portal.py::test_03_booking_exceeds_capacity_failure PASSED [ 15%]
+backend/tests/test_gym_portal.py::test_04_duplicate_booking_failure PASSED [ 21%]
+backend/tests/test_gym_portal.py::test_05_inactive_member_booking_failure PASSED [ 26%]
+backend/tests/test_gym_portal.py::test_06_cancellation_grace_period_success PASSED [ 31%]
+backend/tests/test_gym_portal.py::test_07_late_cancellation_applies_penalty_point PASSED [ 36%]
+backend/tests/test_gym_portal.py::test_08_no_show_applies_penalty_point PASSED [ 42%]
+backend/tests/test_gym_portal.py::test_09_penalty_tier2_same_day_ban_trigger PASSED [ 47%]
+backend/tests/test_gym_portal.py::test_10_same_day_ban_rejects_advance_booking PASSED [ 52%]
+backend/tests/test_gym_portal.py::test_11_same_day_ban_allows_short_notice_booking PASSED [ 57%]
+backend/tests/test_gym_portal.py::test_12_repeated_offense_extends_ban_and_freezes_account PASSED [ 63%]
+backend/tests/test_gym_portal.py::test_13_customer_support_ticket_clears_penalty_and_ban PASSED [ 68%]
+backend/tests/test_gym_portal.py::test_14_weekly_target_achieved_increments_streak PASSED [ 73%]
+backend/tests/test_gym_portal.py::test_15_streak_deficit_consumes_life_and_protects_streak PASSED [ 78%]
+backend/tests/test_gym_portal.py::test_16_exhausted_lives_resets_streak_to_zero PASSED [ 84%]
+backend/tests/test_gym_portal.py::test_17_achievement_awards_life_respects_max_cap_of_3 PASSED [ 89%]
+backend/tests/test_gym_portal.py::test_18_weekly_earned_life_limit_enforced PASSED [ 94%]
+backend/tests/test_gym_portal.py::test_19_monthly_cron_resets_penalty_points PASSED [100%]
+
+============================== warnings summary ===============================
+.venv\Lib\site-packages\starlette\testclient.py:36
+  D:\Code\DevOpsFinal\.venv\Lib\site-packages\starlette\testclient.py:36: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]
+
+.venv\Lib\site-packages\pydantic\_internal\_config.py:295
+  D:\Code\DevOpsFinal\.venv\Lib\site-packages\pydantic\_internal\_config.py:295: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.10/migration/
+    warnings.warn(DEPRECATION_MESSAGE, DeprecationWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================= 19 passed, 2 warnings in 2.39s ========================
