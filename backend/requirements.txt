@@ -1,0 +1,18 @@
+fastapi==0.115.8
+uvicorn[standard]==0.34.0
+pydantic==2.10.6
+email-validator==2.3.0
+pydantic-settings==2.7.1
+sqlalchemy==2.0.38
+psycopg[binary]==3.2.4
+alembic==1.14.1
+prometheus-fastapi-instrumentator==7.0.2
+celery==5.4.0
+redis==5.2.1
+python-dateutil==2.9.0.post0
+
+# Testing
+pytest==8.3.4
+pytest-asyncio==0.25.3
+httpx==0.28.1
+freezegun==1.5.1
