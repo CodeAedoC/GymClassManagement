@@ -1,0 +1,48 @@
+backend:
+  replicaCount: 2
+  image:
+    repository: ghcr.io/codeaedoc/gymclassmanagement/gym-backend
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8000
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 200m
+      memory: 256Mi
+  env:
+    ENVIRONMENT: production
+    DATABASE_URL: postgresql+psycopg://gym_user:gym_password@gym-postgres:5432/gym_db
+    REDIS_URL: redis://gym-redis:6379/0
+
+frontend:
+  replicaCount: 2
+  image:
+    repository: ghcr.io/codeaedoc/gymclassmanagement/gym-frontend
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 80
+  resources:
+    limits:
+      cpu: 250m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+ingress:
+  enabled: true
+  className: nginx
+  host: gym.local
+
+hpa:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70

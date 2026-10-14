@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: gym-portal-backend-monitor
+  namespace: gym-portal
+  labels:
+    release: prometheus-stack
+spec:
+  selector:
+    matchLabels:
+      app: gym-portal-backend
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 15s

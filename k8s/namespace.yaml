@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: gym-portal
+  labels:
+    app.kubernetes.io/name: gym-portal
+    app.kubernetes.io/part-of: gym-membership-system
