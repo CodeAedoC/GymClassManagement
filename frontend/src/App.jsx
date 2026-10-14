@@ -300,6 +300,71 @@ export default function App() {
           </div>
         </section>
 
+        {/* Unlocked Achievements Showcase & Demo Controls */}
+        <section className="glass-panel p-6 rounded-2xl space-y-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div>
+              <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                <Award className="w-5 h-5 text-amber-400" />
+                Unlocked Achievements & Milestones
+              </h2>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Earned from weekly over-achievements, consistency milestones, and class targets.
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                onClick={async () => {
+                  await fetch('/api/v1/streak/target', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ member_id: memberId, weekly_target_days: 5 })
+                  })
+                  fetchData()
+                }}
+                className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-medium border border-slate-700"
+              >
+                Set Target to 5
+              </button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+            {[
+              { id: 'OVER_ACHIEVER_1_WEEK', name: 'Overachiever (1 Wk)', desc: 'Attended > Target', icon: '⚡' },
+              { id: 'OVER_ACHIEVER_2_WEEKS', name: 'Elite Consistency', desc: 'Consecutive Goals', icon: '🌟' },
+              { id: 'STREAK_MILESTONE_4_WEEKS', name: '4-Week Champion', desc: 'Protected Streak', icon: '🏆' },
+              { id: 'ATTENDED_5_PLUS_CLASSES', name: 'Iron Warrior', desc: '5+ Classes in Week', icon: '🛡️' },
+            ].map((ach) => {
+              const isUnlocked = streak?.achievements?.includes(ach.id)
+              return (
+                <div 
+                  key={ach.id} 
+                  className={`p-3 rounded-xl border flex flex-col justify-between transition ${
+                    isUnlocked 
+                      ? 'bg-amber-500/10 border-amber-500/30 text-amber-200' 
+                      : 'bg-slate-900/60 border-slate-800 text-slate-500'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-xl">{ach.icon}</span>
+                    <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold uppercase ${
+                      isUnlocked ? 'bg-amber-500/20 text-amber-300' : 'bg-slate-800 text-slate-600'
+                    }`}>
+                      {isUnlocked ? 'Unlocked' : 'Locked'}
+                    </span>
+                  </div>
+                  <div className="mt-2">
+                    <div className="text-xs font-bold text-white truncate">{ach.name}</div>
+                    <div className="text-[11px] text-slate-400 mt-0.5">{ach.desc}</div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </section>
+
         {/* Classes & Schedule Section */}
         <section className="space-y-4">
           <div className="flex items-center justify-between">
