@@ -6,10 +6,8 @@ from app.models.models import (
     Booking,
     StreakProfile,
     SupportTicket,
-    MembershipType,
     RestrictionStatus,
     BookingStatus,
-    TicketStatus,
 )
 from app.services.streak_service import evaluate_member_week
 from app.services.analytics_service import reset_monthly_penalty_points

@@ -1,7 +1,6 @@
 from typing import List
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
-from sqlalchemy import func
 from app.core.database import get_db
 from app.models.models import Slot, Booking, BookingStatus
 from app.schemas.schemas import SlotCreate, SlotResponse

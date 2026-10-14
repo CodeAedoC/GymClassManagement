@@ -1,4 +1,3 @@
-from datetime import datetime, timezone
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 from app.models.models import Member, SupportTicket, TicketStatus, RestrictionStatus

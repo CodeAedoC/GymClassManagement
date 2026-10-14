@@ -1,7 +1,7 @@
-from datetime import datetime, date
+from datetime import datetime
 from typing import Optional, List
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
-from app.models.models import MembershipType, RestrictionStatus, AchievementType, BookingStatus, TicketStatus
+from app.models.models import MembershipType, RestrictionStatus, BookingStatus, TicketStatus
 
 
 # --- Member Schemas ---

@@ -2,13 +2,12 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy.orm import Session
 from app.core.database import get_db
-from app.models.models import Booking, BookingStatus, Slot, Member
+from app.models.models import Booking, BookingStatus
 from app.schemas.schemas import (
     BookingCreate,
     BookingResponse,
     BookingCancelResponse,
     BookingCompleteResponse,
-    SlotResponse,
 )
 from app.services.booking_service import create_booking
 from app.services.cancellation_service import cancel_booking

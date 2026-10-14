@@ -9,7 +9,6 @@ from app.models.models import (
     BookingStatus,
     AchievementType,
 )
-from app.core.metrics import GYM_ACTIVE_STREAKS_TOTAL
 
 
 def get_utc_now():
