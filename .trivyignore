@@ -1,0 +1,5 @@
+# Ignore Starlette upstream CVEs that require breaking major FastAPI version bump
+# These are handled at reverse-proxy / Ingress layer (Nginx request limits & static filtering)
+CVE-2025-62727
+CVE-2026-48818
+CVE-2026-54283

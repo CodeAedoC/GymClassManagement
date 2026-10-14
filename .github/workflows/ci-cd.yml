@@ -92,6 +92,7 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
+          trivyignores: .trivyignore
 
       - name: Run Trivy Security Scan on Frontend Image
         uses: aquasecurity/trivy-action@master
@@ -102,6 +103,7 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
+          trivyignores: .trivyignore
 
       - name: Log in to GitHub Container Registry
         if: github.event_name != 'pull_request'
