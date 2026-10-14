@@ -96,7 +96,7 @@ docker compose up --build -d
 - **Readiness Check Endpoint**: [http://localhost:8000/ready](http://localhost:8000/ready)
 - **Prometheus Metrics (Raw)**: [http://localhost:8000/metrics](http://localhost:8000/metrics)
 - **Prometheus UI**: [http://localhost:9090](http://localhost:9090)
-- **Grafana Visual Dashboard**: [http://localhost:3200](http://localhost:3200) (pre-configured with live charts)
+- **Grafana Visual Dashboard**: [http://localhost:3200/d/fg17pd20blz40f/gym-portal-observability-and-domain-metrics](http://localhost:3200/d/fg17pd20blz40f/gym-portal-observability-and-domain-metrics) *(Direct access enabled — opens live dashboard instantly with no login required)*
 
 To stop the stack:
 ```bash
