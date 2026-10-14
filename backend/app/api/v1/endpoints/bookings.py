@@ -27,7 +27,8 @@ def api_get_bookings(
     status: Optional[BookingStatus] = Query(None),
     db: Session = Depends(get_db),
 ):
-    query = db.query(Booking)
+    from sqlalchemy.orm import joinedload
+    query = db.query(Booking).options(joinedload(Booking.slot))
     if member_id is not None:
         query = query.filter(Booking.member_id == member_id)
     if status is not None:

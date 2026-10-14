@@ -53,8 +53,8 @@ def create_booking(db: Session, member_id: int, slot_id: int) -> Booking:
                     detail="Same-day restriction active: cannot book classes starting more than 2 hours in advance"
                 )
 
-    # 4. Check Duplicate Booking
-    existing = (
+    # 4. Check Duplicate & Overlapping Bookings
+    existing_same = (
         db.query(Booking)
         .filter(
             Booking.member_id == member_id,
@@ -63,8 +63,30 @@ def create_booking(db: Session, member_id: int, slot_id: int) -> Booking:
         )
         .first()
     )
-    if existing:
+    if existing_same:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Member is already booked for this slot")
+
+    # Check for any overlapping confirmed class booking
+    slot_end = slot.end_time
+    if slot_end.tzinfo is None:
+        slot_end = slot_end.replace(tzinfo=timezone.utc)
+
+    overlap_booking = (
+        db.query(Booking)
+        .join(Slot, Booking.slot_id == Slot.id)
+        .filter(
+            Booking.member_id == member_id,
+            Booking.status == BookingStatus.CONFIRMED,
+            Slot.start_time < slot_end,
+            Slot.end_time > slot_start,
+        )
+        .first()
+    )
+    if overlap_booking:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Cannot book class: you already have an active reservation overlapping with this time slot."
+        )
 
     # 5. Check Capacity
     confirmed_count = (

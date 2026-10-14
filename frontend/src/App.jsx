@@ -28,48 +28,69 @@ export default function App() {
   const [appealMessage, setAppealMessage] = useState(null)
 
   // Fetch all state
-  const fetchData = async () => {
+  const fetchData = async (isInitial = false) => {
     try {
-      setLoading(true)
+      if (isInitial) setLoading(true)
       // 1. Fetch slots
-      const slotsRes = await fetch('/api/v1/slots')
-      if (slotsRes.ok) {
-        setSlots(await slotsRes.json())
+      try {
+        const slotsRes = await fetch('/api/v1/slots')
+        if (slotsRes.ok) {
+          setSlots(await slotsRes.json())
+        }
+      } catch (e) {
+        console.error('Error fetching slots', e)
       }
 
       // 2. Fetch member & streak
-      const memRes = await fetch(`/api/v1/members/${memberId}`)
-      if (memRes.ok) {
-        setMember(await memRes.json())
-      }
-
-      const streakRes = await fetch(`/api/v1/streak/status?member_id=${memberId}`)
-      if (streakRes.ok) {
-        setStreak(await streakRes.json())
+      try {
+        const memRes = await fetch(`/api/v1/members/${memberId}`)
+        if (memRes.ok) {
+          setMember(await memRes.json())
+        }
+        const streakRes = await fetch(`/api/v1/streak/status?member_id=${memberId}`)
+        if (streakRes.ok) {
+          setStreak(await streakRes.json())
+        }
+      } catch (e) {
+        console.error('Error fetching member/streak', e)
       }
 
       // 3. Fetch bookings
-      const bookRes = await fetch(`/api/v1/bookings?member_id=${memberId}`)
-      if (bookRes.ok) {
-        setBookings(await bookRes.json())
+      try {
+        const bookRes = await fetch(`/api/v1/bookings?member_id=${memberId}`)
+        if (bookRes.ok) {
+          setBookings(await bookRes.json())
+        }
+      } catch (e) {
+        console.error('Error fetching bookings', e)
       }
 
       // 4. Fetch analytics
-      const anaRes = await fetch('/api/v1/analytics/occupancy')
-      if (anaRes.ok) {
-        setAnalytics(await anaRes.json())
+      try {
+        const anaRes = await fetch('/api/v1/analytics/occupancy')
+        if (anaRes.ok) {
+          setAnalytics(await anaRes.json())
+        }
+      } catch (e) {
+        console.error('Error fetching analytics', e)
       }
+
       setError(null)
     } catch (err) {
       console.error(err)
-      setError('Failed to connect to backend server. Ensure backend is running.')
+      if (isInitial) setError('Failed to connect to backend server. Ensure backend is running.')
     } finally {
-      setLoading(false)
+      if (isInitial) setLoading(false)
     }
   }
 
+  // Initial fetch and auto-refresh interval (every 3 seconds)
   useEffect(() => {
-    fetchData()
+    fetchData(true)
+    const interval = setInterval(() => {
+      fetchData(false)
+    }, 3000)
+    return () => clearInterval(interval)
   }, [memberId])
 
   // Book a class
@@ -108,11 +129,33 @@ export default function App() {
     }
   }
 
+  // Indian Date Format Helpers (DD/MM/YYYY)
+  const formatIndianDate = (dateVal) => {
+    if (!dateVal) return ''
+    const d = new Date(typeof dateVal === 'string' && !dateVal.endsWith('Z') && !dateVal.includes('+') ? `${dateVal}Z` : dateVal)
+    return d.toLocaleDateString('en-GB') // formats as DD/MM/YYYY
+  }
+
+  const formatIndianDateTime = (dateVal) => {
+    if (!dateVal) return ''
+    const d = new Date(typeof dateVal === 'string' && !dateVal.endsWith('Z') && !dateVal.includes('+') ? `${dateVal}Z` : dateVal)
+    return `${d.toLocaleDateString('en-GB')} at ${d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
+  }
+
   // Pre-cancel evaluation (Checks if < 2 hours)
   const initiateCancel = (booking) => {
-    const slotStart = new Date(booking.slot?.start_time || new Date())
-    const now = new Date()
-    const diffHours = (slotStart - now) / (1000 * 60 * 60)
+    // Resolve slot from booking.slot or fallback to slots list
+    const slot = booking.slot || slots.find(s => s.id === booking.slot_id)
+    const slotStartStr = slot?.start_time
+    let slotStartTime
+    if (slotStartStr) {
+      slotStartTime = new Date(typeof slotStartStr === 'string' && !slotStartStr.endsWith('Z') && !slotStartStr.includes('+') ? `${slotStartStr}Z` : slotStartStr).getTime()
+    } else {
+      slotStartTime = Date.now() + 3 * 3600 * 1000 // default future if unknown
+    }
+
+    const nowTime = Date.now()
+    const diffHours = (slotStartTime - nowTime) / (1000 * 60 * 60)
 
     setCancellingBooking(booking)
     if (diffHours < 2) {
@@ -177,9 +220,9 @@ export default function App() {
             <ShieldAlert className="w-6 h-6 animate-pulse" />
             <span className="font-semibold text-sm md:text-base">
               {member.restriction_status === 'FROZEN' ? (
-                <>ACCOUNT FROZEN: Booking privileges suspended until {new Date(member.restriction_until).toLocaleString()}.</>
+                <>ACCOUNT FROZEN: Booking privileges suspended until {formatIndianDateTime(member.restriction_until)}.</>
               ) : (
-                <>SAME-DAY RESTRICTION ACTIVE: You can only book classes starting within 2 hours until {new Date(member.restriction_until).toLocaleDateString()}.</>
+                <>SAME-DAY RESTRICTION ACTIVE: You can only book classes starting within 2 hours until {formatIndianDate(member.restriction_until)}.</>
               )}
             </span>
           </div>
@@ -387,7 +430,8 @@ export default function App() {
               </div>
             ) : (
               slots.map((slot) => {
-                const startTime = new Date(slot.start_time)
+                const rawTime = slot.start_time?.endsWith('Z') ? slot.start_time : `${slot.start_time}Z`
+                const startTime = new Date(rawTime)
                 const isFull = slot.booked_count >= slot.capacity
                 return (
                   <div key={slot.id} className="glass-panel p-5 rounded-2xl flex flex-col justify-between hover:border-slate-700 transition duration-200">
@@ -404,7 +448,7 @@ export default function App() {
                       </div>
                       <div className="flex items-center text-xs text-slate-400 mt-3 space-x-2">
                         <Clock className="w-4 h-4 text-slate-500" />
-                        <span>{startTime.toLocaleDateString()} at {startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                        <span>{formatIndianDateTime(slot.start_time)}</span>
                       </div>
                     </div>
 
@@ -442,42 +486,48 @@ export default function App() {
               </div>
             ) : (
               <div className="divide-y divide-slate-800">
-                {bookings.map((b) => (
-                  <div key={b.id} className="p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-semibold text-white">Booking #{b.id}</span>
-                        <span className={`text-[11px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${
-                          b.status === 'CONFIRMED' ? 'bg-indigo-500/20 text-indigo-400 border border-indigo-500/30' :
-                          b.status === 'COMPLETED' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
-                          'bg-slate-800 text-slate-400'
-                        }`}>
-                          {b.status}
-                        </span>
+                {bookings.map((b) => {
+                  const bookedSlot = b.slot || slots.find(s => s.id === b.slot_id)
+                  const slotTitle = bookedSlot?.title || `Class Slot #${b.slot_id}`
+                  const slotTiming = bookedSlot ? formatIndianDateTime(bookedSlot.start_time) : null
+                  return (
+                    <div key={b.id} className="p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-white text-base">{slotTitle}</span>
+                          <span className={`text-[11px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${
+                            b.status === 'CONFIRMED' ? 'bg-indigo-500/20 text-indigo-400 border border-indigo-500/30' :
+                            b.status === 'COMPLETED' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
+                            'bg-slate-800 text-slate-400'
+                          }`}>
+                            {b.status}
+                          </span>
+                        </div>
+                        <p className="text-xs text-slate-400 mt-1">
+                          {slotTiming && <span className="text-orange-400 font-medium mr-2">📅 {slotTiming}</span>}
+                          <span>Reserved: {formatIndianDate(b.created_at)} (Ref #{b.id})</span>
+                        </p>
                       </div>
-                      <p className="text-xs text-slate-400 mt-1">
-                        Slot #{b.slot_id} • Reserved on {new Date(b.created_at).toLocaleDateString()}
-                      </p>
-                    </div>
 
-                    {b.status === 'CONFIRMED' && (
-                      <div className="flex items-center space-x-3 w-full sm:w-auto">
-                        <button
-                          onClick={() => handleCompleteBooking(b.id)}
-                          className="flex-1 sm:flex-none px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold shadow-md shadow-emerald-600/20 transition"
-                        >
-                          Check-in / Complete
-                        </button>
-                        <button
-                          onClick={() => initiateCancel(b)}
-                          className="flex-1 sm:flex-none px-4 py-2 bg-rose-600/20 hover:bg-rose-600/30 border border-rose-500/30 text-rose-300 rounded-xl text-xs font-semibold transition"
-                        >
-                          Cancel Booking
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                ))}
+                      {b.status === 'CONFIRMED' && (
+                        <div className="flex items-center space-x-3 w-full sm:w-auto">
+                          <button
+                            onClick={() => handleCompleteBooking(b.id)}
+                            className="flex-1 sm:flex-none px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold shadow-md shadow-emerald-600/20 transition"
+                          >
+                            Check-in / Complete
+                          </button>
+                          <button
+                            onClick={() => initiateCancel(b)}
+                            className="flex-1 sm:flex-none px-4 py-2 bg-rose-600/20 hover:bg-rose-600/30 border border-rose-500/30 text-rose-300 rounded-xl text-xs font-semibold transition"
+                          >
+                            Cancel Booking
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )
+                })}
               </div>
             )}
           </div>
