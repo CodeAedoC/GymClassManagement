@@ -80,5 +80,36 @@ services:
     ports:
       - "3100:8080"
 
+  prometheus:
+    image: prom/prometheus:v2.51.0
+    container_name: gym-prometheus
+    restart: unless-stopped
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    depends_on:
+      backend:
+        condition: service_healthy
+
+  grafana:
+    image: grafana/grafana:10.4.0
+    container_name: gym-grafana
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    volumes:
+      - ./monitoring/grafana-datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
+      - ./monitoring/grafana-dashboard-provider.yml:/etc/grafana/provisioning/dashboards/provider.yml
+      - ./monitoring/grafana-dashboard.json:/etc/grafana/provisioning/dashboards/gym-dashboard.json
+    ports:
+      - "3200:3000"
+    depends_on:
+      - prometheus
+
 volumes:
   postgres_data:
