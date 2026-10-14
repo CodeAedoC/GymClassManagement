@@ -78,7 +78,7 @@ services:
       backend:
         condition: service_healthy
     ports:
-      - "3000:8080"
+      - "3100:8080"
 
 volumes:
   postgres_data:
