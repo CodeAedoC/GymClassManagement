@@ -190,3 +190,25 @@ helm upgrade --install gym-portal helm/gym-portal -n gym-portal
   - Active Member Streaks
   - Late Cancellations Total
 - **Kubernetes / Helm Manifests**: Located in `monitoring/` including `service-monitor.yaml`, `values.yaml`, and `grafana-dashboard.json`.
+
+---
+
+## 9. Verification & Evidence Screenshots
+
+The following artifacts and screenshots verify full compliance with each capstone grading module:
+
+### M1 & M4 — Live Application UI (`http://localhost:3100`)
+![Frontend Application UI](screenshots/01_frontend_application.png)
+
+### M9 — Prometheus Metrics Exposition (`http://localhost:8000/metrics`)
+![Prometheus Metrics Output](screenshots/02_prometheus_metrics.png)
+
+### M9 — Prometheus Scrape Targets Active (`http://localhost:9090/targets`)
+![Prometheus Targets UP](screenshots/03_prometheus_targets_up.png)
+
+### M9 — Grafana Real-Time Observability Dashboard (`http://localhost:3200`)
+![Grafana Live Dashboard](screenshots/04_grafana_dashboard.png)
+
+### M3 — Git Commit History ($\ge 10$ Semantic Commits)
+![GitHub Commit History](screenshots/05_git_commits_history.png)
+
