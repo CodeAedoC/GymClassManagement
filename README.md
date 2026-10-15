@@ -5,7 +5,6 @@
 A production-ready SaaS Gym & Fitness Facility Management Portal featuring automated attendance streaks protected by lives, automated late-cancellation penalty tiers, support appeal workflows, Celery background scheduling, containerization, DevSecOps scanning, AWS infrastructure as code, Kubernetes Helm packaging, and Prometheus/Grafana observability.
 
 ---
-Demo
 
 ## 1. System Architecture
 
