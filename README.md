@@ -5,7 +5,23 @@
 A production-ready SaaS Gym & Fitness Facility Management Portal featuring automated attendance streaks protected by lives, automated late-cancellation penalty tiers, support appeal workflows, Celery background scheduling, containerization, DevSecOps scanning, AWS infrastructure as code, Kubernetes Helm packaging, and Prometheus/Grafana observability.
 
 ---
-Git Demo
+
+## 🎬 Demo Video
+
+> **[▶ Watch Full Pipeline Demo on Loom](https://www.loom.com/share/59b4c4183a24434fb8b0ee56f1e4674d)**
+>
+> 💡 **Recommended: Watch at 1.7× speed**
+>
+> This recording walks through the complete end-to-end pipeline including:
+> - Live frontend UI (booking, cancellation, streak & penalty workflows)
+> - FastAPI backend with Swagger docs
+> - Prometheus metrics & Grafana observability dashboard
+> - Docker Compose multi-service stack
+> - Kubernetes Helm deployment with HPA autoscaling
+> - CI/CD & DevSecOps pipeline (GitHub Actions + Trivy CVE scanning)
+> - Terraform Infrastructure as Code (VPC + EKS plan)
+
+---
 
 ## 1. System Architecture
 
